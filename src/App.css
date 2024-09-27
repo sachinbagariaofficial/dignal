@@ -1,0 +1,24 @@
+#root {
+  background-color: #171717;
+}
+
+.sticky-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-image: url("../public/assets/images/nav_bar.png"); /* Replace with your image path */
+  background-size: cover; /* Ensures the image covers the entire area */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents image from repeating */
+  width: 100%;
+}
+
+.search-bar {
+  padding: 1rem; /* Adjust padding for the search bar */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* Semi-transparent background for better visibility */
+}
