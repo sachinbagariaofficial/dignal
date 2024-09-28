@@ -4,7 +4,7 @@ import { useMovieContext } from "../context/MovieContext";
 type NavBarProps = {
   searchTerm: string;
   setSearchTerm: (value: string) => void;
-  setFilterModal: any;
+  setFilterModal: (value: boolean) => void;
 };
 
 const NavBar: React.FC<NavBarProps> = ({
@@ -21,9 +21,11 @@ const NavBar: React.FC<NavBarProps> = ({
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
-
+    if (!state.movies.length) {
+      setValidationMessage("Sorry not able to search now");
+    }
     // Validate the search term length
-    if (newSearchTerm.length < 1) {
+    else if (newSearchTerm.length < 1) {
       setValidationMessage("Please enter at least 1 character.");
       dispatch({ type: "SET_FILTERED_MOVIES", payload: "" });
     } else if (newSearchTerm.length > 15) {

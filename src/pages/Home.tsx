@@ -21,8 +21,12 @@ const Home: React.FC = () => {
       const newMovies = await fetchMovies(page);
       return newMovies; // Return the movies
     } catch (error) {
-      handleError(`Failed to load movies: ${error.message} 🥲.`);
-      return []; // Return an empty array to avoid crash
+      if (error instanceof Error) {
+        handleError(`Failed to load movies: ${error.message} 🥲.`);
+      } else {
+        handleError("An unknown error occurred 🥲.");
+      }
+      return [];
     }
   };
 
@@ -63,7 +67,7 @@ const Home: React.FC = () => {
       />
       <div className="p-4">
         {/* Display error if there is one */}
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
 
         {/* Show "No results found" only if there's no error and no filteredMovies */}
         {!loading && !error && filteredMovies.length === 0 && (

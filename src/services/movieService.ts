@@ -1,4 +1,5 @@
 import axios from "axios";
+import { APIResponseMovie } from "../types/Movie";
 
 // Example Base URL
 const API_BASE_URL = "https://test.create.diagnal.com";
@@ -13,7 +14,7 @@ export const fetchMovies = async (page: number) => {
 
     // Extracting the content items from the response
     const movies = response.data.page["content-items"].content.map(
-      (movie: any) => ({
+      (movie: APIResponseMovie) => ({
         name: movie.name,
         posterUrl: `${API_BASE_URL}/images/${movie["poster-image"]}`, // Construct full image URL
       })
