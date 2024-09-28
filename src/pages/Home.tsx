@@ -70,7 +70,11 @@ const Home: React.FC = () => {
             dataLength={filteredMovies.length}
             next={loadMoreMovies}
             hasMore={hasMore}
-            loader={<p>Loading movies...</p>}
+            loader={
+              !hasMore && filteredMovies.length > 0 ? (
+                <p>Loading movies...</p>
+              ) : null
+            }
             endMessage={
               !hasMore && filteredMovies.length > 0 ? (
                 <p className="text-center mt-2">No more movies to load!</p>
