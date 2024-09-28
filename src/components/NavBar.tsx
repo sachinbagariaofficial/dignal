@@ -1,11 +1,6 @@
 import React from "react";
 
-interface NavBarProps {
-  onSearch: () => void; // Prop to toggle search visibility
-  searchVisible: boolean; // Prop to track if search bar is visible
-}
-
-const NavBar: React.FC<NavBarProps> = ({ onSearch, searchVisible }) => {
+const NavBar = () => {
   const handleBack = () => {
     // Handle back functionality (optional)
   };
@@ -20,14 +15,10 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, searchVisible }) => {
       />
       <h1 className="text-xl">Romantic Comedy</h1>
       <img
-        src={
-          searchVisible
-            ? "/assets/images/close.png" // Show close icon when search bar is visible
-            : "/assets/images/search.png" // Show search icon when search bar is hidden
-        }
-        alt={searchVisible ? "Close" : "Search"}
+        src={"../../public/assets/images/search.png"}
+        alt={"Search"}
         className="w-6 h-6 cursor-pointer"
-        onClick={onSearch} // Toggle search bar on click
+        onClick={handleBack} // Toggle search bar on click
       />
     </nav>
   );
