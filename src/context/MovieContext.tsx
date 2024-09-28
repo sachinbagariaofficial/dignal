@@ -17,7 +17,8 @@ type Action =
   | { type: "SET_FILTERED_MOVIES"; payload: string } // Search term is a string
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null } // Allow setting error to null
-  | { type: "SET_PAGE"; payload: number };
+  | { type: "SET_PAGE"; payload: number }
+  | { type: "SET_HAS_MORE"; payload: boolean }; // <-- Add this action to handle `hasMore`
 
 // Initial state
 const initialState: MovieState = {
@@ -78,6 +79,12 @@ const movieReducer = (state: MovieState, action: Action): MovieState => {
       return {
         ...state,
         page: action.payload,
+      };
+
+    case "SET_HAS_MORE": // <-- Add the new case for setting `hasMore`
+      return {
+        ...state,
+        hasMore: action.payload,
       };
 
     default:

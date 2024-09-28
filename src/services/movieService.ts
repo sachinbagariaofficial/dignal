@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Example Base URL
-const API_BASE_URL = "https://test.create.diagnal.coms";
+const API_BASE_URL = "https://test.create.diagnal.com";
 
 // Fetch movies function with pagination
 export const fetchMovies = async (page: number) => {
@@ -23,7 +23,13 @@ export const fetchMovies = async (page: number) => {
 
     return movies; // Return the array of movies
   } catch (error) {
-    console.error("Error fetching movies:", error);
-    return [];
+    // If we hit a 403 or similar error, treat it as "no more data"
+    if (axios.isAxiosError(error) && error.response?.status === 403) {
+      console.log("No more data to load");
+      return []; // Returning null signifies no more data
+    } else {
+      console.error("Error fetching movies:", error);
+      throw error; // Throw other errors to be handled in the calling function
+    }
   }
 };
