@@ -4,9 +4,14 @@ import { useMovieContext } from "../context/MovieContext";
 type NavBarProps = {
   searchTerm: string;
   setSearchTerm: (value: string) => void;
+  setFilterModal: any;
 };
 
-const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
+const NavBar: React.FC<NavBarProps> = ({
+  searchTerm,
+  setSearchTerm,
+  setFilterModal,
+}) => {
   const [isSearching, setIsSearching] = useState(false); // Track if search is active
   const { state, dispatch } = useMovieContext();
   const [validationMessage, setValidationMessage] = useState<string | null>(
@@ -30,11 +35,13 @@ const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
   };
 
   const handleSearchIconClick = () => {
+    setFilterModal(true);
     setIsSearching(true);
     dispatch({ type: "SET_FILTERED_MOVIES", payload: "" }); // Set filteredMovies to empty when searching
   };
 
   const handleBackClick = () => {
+    setFilterModal(false);
     setIsSearching(false);
     setSearchTerm(""); // Clear the search term
     dispatch({ type: "SET_FILTERED_MOVIES", payload: "" }); // Reset filtered movies

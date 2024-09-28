@@ -7,7 +7,7 @@ import { fetchMovies } from "../services/movieService";
 
 const Home: React.FC = () => {
   const { state, dispatch } = useMovieContext();
-  const { filteredMovies, loading, error, page, hasMore } = state;
+  const { filteredMovies, loading, error, page, hasMore, movies } = state;
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -50,11 +50,17 @@ const Home: React.FC = () => {
     }
   };
 
+  const [filterModal, setFilterModal] = useState(false);
+
   console.log("hasMore", hasMore);
 
   return (
     <div className="min-h-screen">
-      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <NavBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        setFilterModal={setFilterModal}
+      />
       <div className="p-4">
         {/* Display error if there is one */}
         {error && <p className="text-red-500">{error}</p>}
@@ -65,28 +71,28 @@ const Home: React.FC = () => {
         )}
 
         {/* Display InfiniteScroll when no error exists */}
-        {!error && (
+        {!error && !filterModal ? (
           <InfiniteScroll
-            dataLength={filteredMovies.length}
+            dataLength={movies.length}
             next={loadMoreMovies}
             hasMore={hasMore}
-            loader={
-              !hasMore && filteredMovies.length > 0 ? (
-                <p>Loading movies...</p>
-              ) : null
-            }
+            loader={<p>Loading movies...</p>}
             endMessage={
-              !hasMore && filteredMovies.length > 0 ? (
-                <p className="text-center mt-2">No more movies to load!</p>
-              ) : null
+              <p className="text-center mt-2">No more movies to load!</p>
             }
           >
             <div className="grid grid-cols-3 gap-4">
-              {filteredMovies.map((movie, index) => (
+              {movies.map((movie, index) => (
                 <MovieCard key={index} movie={movie} searchTerm={searchTerm} />
               ))}
             </div>
           </InfiniteScroll>
+        ) : (
+          <div className="grid grid-cols-3 gap-4">
+            {filteredMovies.map((movie, index) => (
+              <MovieCard key={index} movie={movie} searchTerm={searchTerm} />
+            ))}
+          </div>
         )}
       </div>
     </div>
