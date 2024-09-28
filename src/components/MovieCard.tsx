@@ -44,7 +44,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, searchTerm = "" }) => {
           }}
         />
       </div>
-      <p className="text-start text-white mt-2 text-[14px] sm:text-base">
+      <p className="text-start text-white mt-2 text-[14px] sm:text-base truncate">
         {highlightMatch(movie.name, searchTerm)}
       </p>
     </div>

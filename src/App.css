@@ -1,5 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600&display=swap");
+
 body {
   overflow-x: hidden;
+  font-family: "Titillium Web", sans-serif;
+}
+h1,
+h2,
+h3,
+p {
+  font-family: "Titillium Web", sans-serif;
 }
 
 ::-webkit-scrollbar {
