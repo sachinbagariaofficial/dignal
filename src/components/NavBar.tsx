@@ -46,24 +46,31 @@ const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
       {isSearching ? (
         <>
           <div className="flex flex-col w-full gap-4">
-            <div className="flex justify-between gap-5 items-center">
-              <img
-                src="../../public/assets/images/Back.png"
-                alt="Back"
-                className="w-6 h-6 cursor-pointer"
-                onClick={handleBackClick}
-              />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                placeholder="Search movies"
-                className="ml-2 p-2 text-black rounded"
-              />
+            <div className="flex items-center gap-5 justify-between">
+              <div className="flex-none">
+                <img
+                  src="../../public/assets/images/Back.png"
+                  alt="Back"
+                  className="w-6 h-6 cursor-pointer"
+                  onClick={handleBackClick}
+                />
+              </div>
 
-              <span className="ml-4">
-                {state.filteredMovies.length} / {state.movies.length}
-              </span>
+              <div className="flex-grow max-w-[400px]">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  placeholder="Search movies"
+                  className="w-full p-2 text-black rounded"
+                />
+              </div>
+
+              <div className="flex-none min-w-[50px]">
+                <span>
+                  {state.filteredMovies.length} / {state.movies.length}
+                </span>
+              </div>
             </div>
 
             {validationMessage && (

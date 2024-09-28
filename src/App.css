@@ -1,5 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600&display=swap");
 
+:root {
+  --dark-bg-color: #171717;
+  --light-text-color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+}
+
 body {
   overflow-x: hidden;
   font-family: "Titillium Web", sans-serif;
@@ -11,17 +24,9 @@ p {
   font-family: "Titillium Web", sans-serif;
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
-
-* {
-  scrollbar-width: none;
-}
-
 #root {
-  background-color: #171717;
-  color: #ffffff;
+  background-color: var(--dark-bg-color);
+  color: var(--light-text-color);
 }
 
 .sticky-navbar {
