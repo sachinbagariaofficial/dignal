@@ -74,7 +74,7 @@ const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
             </div>
 
             {validationMessage && (
-              <p className="ml-2 text-red-400 text-center">
+              <p className="ml-2 text-red-600 text-center">
                 {validationMessage}
               </p>
             )}

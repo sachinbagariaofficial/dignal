@@ -1,5 +1,6 @@
 import React from "react";
 import { Movie } from "../types/Movie";
+import fallbackImage from "../../public/assets/images/placeholder_for_missing_posters.png";
 
 type MovieCardProps = {
   movie: Movie;
@@ -7,15 +8,16 @@ type MovieCardProps = {
 };
 
 const highlightMatch = (text: string, searchTerm: string) => {
-  console.log("search", searchTerm);
-
   if (!searchTerm) return text;
-  const parts = text.split(new RegExp(`(${searchTerm})`, "gi"));
+
+  const regex = new RegExp(`(${searchTerm})`, "gi");
+  const parts = text.split(regex);
+
   return (
     <>
-      {parts.map((part, i) =>
+      {parts.map((part, index) =>
         part.toLowerCase() === searchTerm.toLowerCase() ? (
-          <mark key={i} className="bg-yellow-300">
+          <mark key={index} className="bg-yellow-300">
             {part}
           </mark>
         ) : (
@@ -32,15 +34,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, searchTerm = "" }) => {
       <div className="relative w-full pb-[150%]">
         <img
           className="absolute inset-0 w-full h-full object-cover rounded"
-          src={
-            movie.posterUrl ||
-            "../../public/assets/images/placeholder_for_missing_posters.png"
-          }
-          alt={movie.name || "Movie name"}
+          src={movie?.posterUrl}
+          alt={movie?.name || "Movie name"}
           loading="lazy"
           onError={(e) => {
-            e.currentTarget.src =
-              "../../public/assets/images/placeholder_for_missing_posters.png";
+            e.currentTarget.src = fallbackImage;
           }}
         />
       </div>

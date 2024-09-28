@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Example Base URL
-const API_BASE_URL = "https://test.create.diagnal.com";
+const API_BASE_URL = "https://test.create.diagnal.coms";
 
 // Fetch movies function with pagination
 export const fetchMovies = async (page: number) => {
