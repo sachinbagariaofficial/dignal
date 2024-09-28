@@ -1,3 +1,15 @@
+body {
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+}
+
 #root {
   background-color: #171717;
   color: #ffffff;
@@ -12,14 +24,4 @@
   background-position: center; /* Centers the image */
   background-repeat: no-repeat; /* Prevents image from repeating */
   width: 100%;
-}
-
-.search-bar {
-  padding: 1rem; /* Adjust padding for the search bar */
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.7
-  ); /* Semi-transparent background for better visibility */
 }

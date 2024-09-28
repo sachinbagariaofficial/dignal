@@ -7,7 +7,7 @@ type MovieCardProps = {
 };
 
 const highlightMatch = (text: string, searchTerm: string) => {
-  console.log("text", text, "searchTerm", searchTerm);
+  console.log("search", searchTerm);
 
   if (!searchTerm) return text;
   const parts = text.split(new RegExp(`(${searchTerm})`, "gi"));

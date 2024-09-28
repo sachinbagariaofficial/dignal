@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { useMovieContext } from "../context/MovieContext";
 
-const NavBar: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+type NavBarProps = {
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+};
+
+const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
   const [isSearching, setIsSearching] = useState(false); // Track if search is active
   const { state, dispatch } = useMovieContext();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    dispatch({ type: "SET_FILTERED_MOVIES", payload: e.target.value });
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+    // You can also add logic here to update the filtered movies based on searchTerm
+    dispatch({ type: "SET_FILTERED_MOVIES", payload: newSearchTerm });
   };
-
   const handleSearchIconClick = () => {
     setIsSearching(true);
   };
@@ -20,11 +25,8 @@ const NavBar: React.FC = () => {
     setSearchTerm(""); // Clear the search term
     dispatch({ type: "SET_FILTERED_MOVIES", payload: "" }); // Reset filtered movies
   };
-
-  console.log("state", state.movies.length);
-
   return (
-    <nav className="flex items-center justify-between p-4 bg-black text-white">
+    <nav className="sticky-navbar flex items-center justify-between p-4 text-white">
       {isSearching ? (
         <>
           <img
@@ -41,7 +43,7 @@ const NavBar: React.FC = () => {
             className="ml-2 p-1 text-black"
           />
           <span className="ml-4">
-            Results: {state.filteredMovies.length} / {state.movies.length}
+            {state.filteredMovies.length} / {state.movies.length}
           </span>
         </>
       ) : (
