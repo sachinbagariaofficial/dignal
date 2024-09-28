@@ -3,25 +3,49 @@ import { Movie } from "../types/Movie";
 
 type MovieCardProps = {
   movie: Movie;
+  searchTerm?: string;
 };
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+const highlightMatch = (text: string, searchTerm: string) => {
+  console.log("text", text, "searchTerm", searchTerm);
+
+  if (!searchTerm) return text;
+  const parts = text.split(new RegExp(`(${searchTerm})`, "gi"));
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === searchTerm.toLowerCase() ? (
+          <mark key={i} className="bg-yellow-300">
+            {part}
+          </mark>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+};
+
+const MovieCard: React.FC<MovieCardProps> = ({ movie, searchTerm = "" }) => {
   return (
     <div className="w-full p-1">
       <div className="relative w-full pb-[150%]">
         <img
           className="absolute inset-0 w-full h-full object-cover"
-          src={movie.posterUrl}
-          alt={movie.name}
+          src={
+            movie.posterUrl ||
+            "../../public/assets/images/placeholder_for_missing_posters.png"
+          }
+          alt={movie.name || "Movie name"}
           loading="lazy"
           onError={(e) => {
             e.currentTarget.src =
-              "/assets/images/placeholder_for_missing_posters.png";
+              "../../public/assets/images/placeholder_for_missing_posters.png";
           }}
         />
       </div>
       <p className="text-start text-white mt-2 text-[14px] sm:text-base">
-        {movie.name}
+        {highlightMatch(movie.name, searchTerm)}
       </p>
     </div>
   );

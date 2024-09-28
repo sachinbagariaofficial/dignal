@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, ReactNode } from "react";
+import { createContext, useContext, useReducer } from "react";
 import { Movie } from "../types/Movie"; // Assuming you have a Movie type
 
 // Define the type for the context state
@@ -6,25 +6,25 @@ type MovieState = {
   movies: Movie[];
   filteredMovies: Movie[];
   loading: boolean;
-  error: string | null;
-  hasMore: boolean; // Add hasMore here
-  page: number; // Assuming you are tracking the current page
+  error: string | null; // Allow both null and string for error
+  hasMore: boolean;
+  page: number;
 };
 
 // Define the actions
 type Action =
-  | { type: "SET_MOVIES"; payload: Movie[]; hasMore?: boolean }
-  | { type: "SET_FILTERED_MOVIES"; payload: Movie[] }
+  | { type: "SET_MOVIES"; payload: Movie[] }
+  | { type: "SET_FILTERED_MOVIES"; payload: string } // Search term is a string
   | { type: "SET_LOADING"; payload: boolean }
-  | { type: "SET_ERROR"; payload: string | null }
-  | { type: "SET_PAGE"; payload: number }; // Action for setting the page
+  | { type: "SET_ERROR"; payload: string | null } // Allow setting error to null
+  | { type: "SET_PAGE"; payload: number };
 
 // Initial state
 const initialState: MovieState = {
-  movies: [],
-  filteredMovies: [],
+  movies: [], // Set movies as an empty array, not never[]
+  filteredMovies: [], // Same for filteredMovies
   loading: true,
-  error: null,
+  error: null, // Initialize error as null
   hasMore: true,
   page: 1,
 };
@@ -44,39 +44,49 @@ const movieReducer = (state: MovieState, action: Action): MovieState => {
     case "SET_MOVIES":
       return {
         ...state,
-        movies: [...state.movies, ...action.payload],
-        filteredMovies: [...state.filteredMovies, ...action.payload],
+        movies: [...state.movies, ...action.payload], // Append new movies to the list
+        filteredMovies: [...state.movies, ...action.payload], // Same for filtered movies initially
         loading: false,
-        hasMore: action.hasMore !== undefined ? action.hasMore : true, // Update hasMore based on action
+        hasMore: action.payload.length > 0, // Check if more movies are loaded
       };
-    case "SET_FILTERED_MOVIES":
+
+    case "SET_FILTERED_MOVIES": {
+      const searchTerm = action.payload.toLowerCase(); // Payload is a string
+      const filtered = state.movies.filter((movie) =>
+        movie.name.toLowerCase().includes(searchTerm)
+      );
       return {
         ...state,
-        filteredMovies: action.payload,
+        filteredMovies: filtered,
       };
+    }
+
     case "SET_LOADING":
       return {
         ...state,
         loading: action.payload,
       };
+
     case "SET_ERROR":
       return {
         ...state,
-        error: action.payload,
+        error: action.payload, // Error can be a string or null
         loading: false,
       };
+
     case "SET_PAGE":
       return {
         ...state,
         page: action.payload,
       };
+
     default:
       return state;
   }
 };
 
 // MovieProvider component
-export const MovieProvider = ({ children }: { children: ReactNode }) => {
+export const MovieProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(movieReducer, initialState);
 
   return (
