@@ -31,7 +31,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, searchTerm = "" }) => {
     <div className="w-full p-1">
       <div className="relative w-full pb-[150%]">
         <img
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover rounded"
           src={
             movie.posterUrl ||
             "../../public/assets/images/placeholder_for_missing_posters.png"

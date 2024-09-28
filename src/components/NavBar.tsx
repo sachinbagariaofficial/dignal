@@ -20,6 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
     // Validate the search term length
     if (newSearchTerm.length < 1) {
       setValidationMessage("Please enter at least 1 character.");
+      dispatch({ type: "SET_FILTERED_MOVIES", payload: "" });
     } else if (newSearchTerm.length > 15) {
       setValidationMessage("Please enter a max. of 15 characters.");
     } else {
@@ -45,7 +46,7 @@ const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
       {isSearching ? (
         <>
           <div className="flex flex-col w-full gap-4">
-            <div className="flex justify-between gap-5">
+            <div className="flex justify-between gap-5 items-center">
               <img
                 src="../../public/assets/images/Back.png"
                 alt="Back"
@@ -57,7 +58,7 @@ const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
                 value={searchTerm}
                 onChange={handleSearchChange}
                 placeholder="Search movies"
-                className="ml-2 p-1 text-black"
+                className="ml-2 p-2 text-black rounded"
               />
 
               <span className="ml-4">
@@ -66,9 +67,9 @@ const NavBar: React.FC<NavBarProps> = ({ searchTerm, setSearchTerm }) => {
             </div>
 
             {validationMessage && (
-              <p className="ml-2 text-red-600 text-center">
+              <p className="ml-2 text-red-400 text-center">
                 {validationMessage}
-              </p> // Display validation message
+              </p>
             )}
           </div>
         </>
