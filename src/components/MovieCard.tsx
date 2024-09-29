@@ -1,12 +1,13 @@
 import React from "react";
-import { Movie } from "../types/Movie";
+import { MovieType } from "../types/Movie";
 import fallbackImage from "../../public/assets/images/placeholder_for_missing_posters.png";
 
 type MovieCardProps = {
-  movie: Movie;
+  movie: MovieType;
   searchTerm?: string;
 };
 
+// This function is for highlight the text pf matching movie with search result
 const highlightMatch = (text: string, searchTerm: string) => {
   if (!searchTerm) return text;
 
@@ -28,21 +29,22 @@ const highlightMatch = (text: string, searchTerm: string) => {
   );
 };
 
+// MovieCard component
 const MovieCard: React.FC<MovieCardProps> = ({ movie, searchTerm = "" }) => {
   return (
-    <div className="w-full p-1">
+    <div className="w-full p-1 mb-2">
       <div className="relative w-full pb-[150%]">
         <img
           className="absolute inset-0 w-full h-full object-cover rounded"
-          src={movie?.posterUrl}
-          alt={movie?.name || "Movie name"}
+          src={movie?.posterUrl || ""}
+          alt={movie?.name || "Romantic comedy Movie"}
           loading="lazy"
           onError={(e) => {
             e.currentTarget.src = fallbackImage;
           }}
         />
       </div>
-      <p className="text-start text-white mt-2 text-[14px] sm:text-base truncate">
+      <p className="text-start text-white mt-2 text-[14px] sm:text-xl truncate">
         {highlightMatch(movie.name, searchTerm)}
       </p>
     </div>

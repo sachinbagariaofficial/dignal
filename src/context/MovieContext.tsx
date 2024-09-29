@@ -1,36 +1,34 @@
 import { createContext, useContext, useReducer } from "react";
-import { Movie } from "../types/Movie"; // Assuming you have a Movie type
+import { MovieType } from "../types/Movie"; // Assuming you have a Movie type
 
-// Define the type for the context state
 type MovieState = {
-  movies: Movie[];
-  filteredMovies: Movie[];
+  movies: MovieType[];
+  filteredMovies: MovieType[];
   loading: boolean;
-  error: string | null; // Allow both null and string for error
+  error: string | null;
   hasMore: boolean;
   page: number;
 };
 
-// Define the actions
 type Action =
-  | { type: "SET_MOVIES"; payload: Movie[] }
-  | { type: "SET_FILTERED_MOVIES"; payload: string } // Search term is a string
+  | { type: "SET_MOVIES"; payload: MovieType[] }
+  | { type: "SET_FILTERED_MOVIES"; payload: string }
   | { type: "SET_LOADING"; payload: boolean }
-  | { type: "SET_ERROR"; payload: string | null } // Allow setting error to null
+  | { type: "SET_ERROR"; payload: string | null }
   | { type: "SET_PAGE"; payload: number }
-  | { type: "SET_HAS_MORE"; payload: boolean }; // <-- Add this action to handle `hasMore`
+  | { type: "SET_HAS_MORE"; payload: boolean };
 
-// Initial state
+// Initial state for movie list
 const initialState: MovieState = {
-  movies: [], // Set movies as an empty array, not never[]
-  filteredMovies: [], // Same for filteredMovies
+  movies: [],
+  filteredMovies: [],
   loading: true,
-  error: null, // Initialize error as null
+  error: null,
   hasMore: true,
   page: 1,
 };
 
-// Create context
+// Create a context for movie list
 const MovieContext = createContext<{
   state: MovieState;
   dispatch: React.Dispatch<Action>;
@@ -39,20 +37,20 @@ const MovieContext = createContext<{
   dispatch: () => undefined,
 });
 
-// Reducer function
+// Reducer for movie store
 const movieReducer = (state: MovieState, action: Action): MovieState => {
   switch (action.type) {
-    case "SET_MOVIES":
+    case "SET_MOVIES": //This case is for storing the movies
       return {
         ...state,
-        movies: [...state.movies, ...action.payload], // Append new movies to the list
-        filteredMovies: [...state.movies, ...action.payload], // Same for filtered movies initially
+        movies: [...state.movies, ...action.payload],
+        filteredMovies: [...state.movies, ...action.payload],
         loading: false,
-        hasMore: action.payload.length > 0, // Check if more movies are loaded
+        hasMore: action.payload.length > 0,
       };
 
-    case "SET_FILTERED_MOVIES": {
-      const searchTerm = action.payload.toLowerCase(); // Payload is a string
+    case "SET_FILTERED_MOVIES": { //This case is for storing the  filter movies
+      const searchTerm = action.payload.toLowerCase();
       const filtered = state.movies.filter((movie) =>
         movie.name.toLowerCase().includes(searchTerm)
       );
@@ -62,26 +60,26 @@ const movieReducer = (state: MovieState, action: Action): MovieState => {
       };
     }
 
-    case "SET_LOADING":
+    case "SET_LOADING": //This case is for loading the movies
       return {
         ...state,
         loading: action.payload,
       };
 
-    case "SET_ERROR":
+    case "SET_ERROR": //This case is for errors that occurs while loading the movie api
       return {
         ...state,
-        error: action.payload, // Error can be a string or null
+        error: action.payload,
         loading: false,
       };
 
-    case "SET_PAGE":
+    case "SET_PAGE": //This case is for storing the pages
       return {
         ...state,
         page: action.payload,
       };
 
-    case "SET_HAS_MORE": // <-- Add the new case for setting `hasMore`
+    case "SET_HAS_MORE": //This case is for checking that there is more api to call or not
       return {
         ...state,
         hasMore: action.payload,
@@ -103,5 +101,4 @@ export const MovieProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Custom hook to use the context
 export const useMovieContext = () => useContext(MovieContext);

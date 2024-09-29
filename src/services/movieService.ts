@@ -1,36 +1,33 @@
 import axios from "axios";
-import { APIResponseMovie } from "../types/Movie";
+import { APIResponseMovieType } from "../types/Movie";
+import { API_BASE_URL } from "../constants/api";
 
-// Example Base URL
-const API_BASE_URL = "https://test.create.diagnal.com";
-
-// Fetch movies function with pagination
+// This is fetching function for movies
 export const fetchMovies = async (page: number) => {
   try {
-    // Fetch the movie data from the API
     const response = await axios.get(`${API_BASE_URL}/data/page${page}.json`);
 
-    console.log("response", response);
-
-    // Extracting the content items from the response
-    const movies = response.data.page["content-items"].content.map(
-      (movie: APIResponseMovie) => ({
+    // Adding posterUrl to each movie with there assigned url
+    const moviesList = response.data?.page["content-items"]?.content?.map(
+      (movie: APIResponseMovieType) => ({
         name: movie.name,
-        posterUrl: `${API_BASE_URL}/images/${movie["poster-image"]}`, // Construct full image URL
+        posterUrl: `${API_BASE_URL}/images/${movie["poster-image"]}`,
       })
     );
+    if (!moviesList?.length) {
+      throw new Error("No movies data")
+    }
+    console.log("movies", moviesList);
 
-    console.log("movies", movies);
-
-    return movies; // Return the array of movies
+    return moviesList;
   } catch (error) {
-    // If we hit a 403 or similar error, treat it as "no more data"
+    // If we get 403 status code when we call the api
     if (axios.isAxiosError(error) && error.response?.status === 403) {
       console.log("No more data to load");
-      return []; // Returning null signifies no more data
+      return [];
     } else {
       console.error("Error fetching movies:", error);
-      throw error; // Throw other errors to be handled in the calling function
+      throw error;
     }
   }
 };

@@ -8,18 +8,19 @@ import { fetchMovies } from "../services/movieService";
 const Home: React.FC = () => {
   const { state, dispatch } = useMovieContext();
   const { filteredMovies, loading, error, page, hasMore, movies } = state;
-
+  const [filterModal, setFilterModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Helper to handle errors and clear errors
+  // This function is used for handling the errors
   const handleError = (errorMessage: string | null) => {
     dispatch({ type: "SET_ERROR", payload: errorMessage });
   };
 
+  // To get new movies form api
   const loadMovies = async (page: number) => {
     try {
       const newMovies = await fetchMovies(page);
-      return newMovies; // Return the movies
+      return newMovies;
     } catch (error) {
       if (error instanceof Error) {
         handleError(`Failed to load movies: ${error.message} 🥲.`);
@@ -32,7 +33,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetchInitialMovies = async () => {
-      const initialMovies = await loadMovies(1); // Load the first page
+      const initialMovies = await loadMovies(1);
       dispatch({ type: "SET_MOVIES", payload: initialMovies });
     };
 
@@ -45,7 +46,7 @@ const Home: React.FC = () => {
       const newMovies = await loadMovies(nextPage);
 
       if (newMovies.length === 0) {
-        dispatch({ type: "SET_HAS_MORE", payload: false }); // Stop fetching more data
+        dispatch({ type: "SET_HAS_MORE", payload: false });
         return;
       }
 
@@ -53,8 +54,6 @@ const Home: React.FC = () => {
       dispatch({ type: "SET_PAGE", payload: nextPage });
     }
   };
-
-  const [filterModal, setFilterModal] = useState(false);
 
   console.log("hasMore", hasMore);
 
@@ -66,33 +65,30 @@ const Home: React.FC = () => {
         setFilterModal={setFilterModal}
       />
       <div className="p-4">
-        {/* Display error if there is one */}
         {error && <p className="text-red-500 text-center">{error}</p>}
 
-        {/* Show "No results found" only if there's no error and no filteredMovies */}
         {!loading && !error && filteredMovies.length === 0 && (
-          <p>No results found 😕.</p>
+          <p className="text-center">No results found 😕</p>
         )}
 
-        {/* Display InfiniteScroll when no error exists */}
         {!error && !filterModal ? (
           <InfiniteScroll
             dataLength={movies.length}
             next={loadMoreMovies}
             hasMore={hasMore}
-            loader={<p>Loading movies...</p>}
+            loader={<p className="text-center">Loading movies...</p>}
             endMessage={
               <p className="text-center mt-2">No more movies to load!</p>
             }
           >
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3 sm:gap-6">
               {movies.map((movie, index) => (
                 <MovieCard key={index} movie={movie} searchTerm={searchTerm} />
               ))}
             </div>
           </InfiniteScroll>
         ) : (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3 sm:gap-6">
             {filteredMovies.map((movie, index) => (
               <MovieCard key={index} movie={movie} searchTerm={searchTerm} />
             ))}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useMovieContext } from "../context/MovieContext";
+import SearchSection from "./SearchSection"; // Import the new component
 
 type NavBarProps = {
   searchTerm: string;
@@ -7,88 +8,71 @@ type NavBarProps = {
   setFilterModal: (value: boolean) => void;
 };
 
+// This component for navbar of page
 const NavBar: React.FC<NavBarProps> = ({
   searchTerm,
   setSearchTerm,
   setFilterModal,
 }) => {
-  const [isSearching, setIsSearching] = useState(false); // Track if search is active
+  const [isSearching, setIsSearching] = useState(false);
   const { state, dispatch } = useMovieContext();
   const [validationMessage, setValidationMessage] = useState<string | null>(
     null
-  ); // State for validation message
+  );
 
+  // This function is for validation of search input
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
-    if (!state.movies.length) {
-      setValidationMessage("Sorry not able to search now");
-    }
-    // Validate the search term length
-    else if (newSearchTerm.length < 1) {
-      setValidationMessage("Please enter at least 1 character.");
-      dispatch({ type: "SET_FILTERED_MOVIES", payload: "" });
-    } else if (newSearchTerm.length > 15) {
-      setValidationMessage("Please enter a max. of 15 characters.");
-    } else {
-      setValidationMessage(null); // Clear message if valid
-      dispatch({ type: "SET_FILTERED_MOVIES", payload: newSearchTerm });
+
+    switch (true) {
+      // If there is no movie data in context
+      case !state.movies.length:
+        setValidationMessage("Sorry not able to search now");
+        return;
+      // If search input text length is less then 1
+      case newSearchTerm.length < 1:
+        setValidationMessage("Please enter at least 1 character.");
+        dispatch({ type: "SET_FILTERED_MOVIES", payload: "" });
+        break;
+      // If search input text length is greater then 15
+      case newSearchTerm.length > 15:
+        setValidationMessage("Please enter a max. of 15 characters.");
+        break;
+      default:
+        setValidationMessage(null);
+        dispatch({ type: "SET_FILTERED_MOVIES", payload: newSearchTerm });
+        break;
     }
   };
 
+  // This function is for search icon
   const handleSearchIconClick = () => {
     setFilterModal(true);
     setIsSearching(true);
-    dispatch({ type: "SET_FILTERED_MOVIES", payload: "" }); // Set filteredMovies to empty when searching
+    dispatch({ type: "SET_FILTERED_MOVIES", payload: "" });
   };
 
+  // This function is for back button icon
   const handleBackClick = () => {
     setFilterModal(false);
     setIsSearching(false);
-    setSearchTerm(""); // Clear the search term
-    dispatch({ type: "SET_FILTERED_MOVIES", payload: "" }); // Reset filtered movies
-    setValidationMessage(null); // Clear any validation message
+    setSearchTerm("");
+    dispatch({ type: "SET_FILTERED_MOVIES", payload: "" });
+    setValidationMessage(null);
   };
 
   return (
     <nav className="sticky-navbar flex items-center justify-between p-4 text-white">
       {isSearching ? (
-        <>
-          <div className="flex flex-col w-full gap-4">
-            <div className="flex items-center gap-5 justify-between">
-              <div className="flex-none">
-                <img
-                  src="../../public/assets/images/Back.png"
-                  alt="Back"
-                  className="w-6 h-6 cursor-pointer"
-                  onClick={handleBackClick}
-                />
-              </div>
-
-              <div className="flex-grow max-w-[400px]">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  placeholder="Search movies"
-                  className="w-full p-2 text-black rounded"
-                />
-              </div>
-
-              <div className="flex-none min-w-[50px]">
-                <span>
-                  {state.filteredMovies.length} / {state.movies.length}
-                </span>
-              </div>
-            </div>
-
-            {validationMessage && (
-              <p className="ml-2 text-red-600 text-center">
-                {validationMessage}
-              </p>
-            )}
-          </div>
-        </>
+        <SearchSection
+          searchTerm={searchTerm}
+          handleSearchChange={handleSearchChange}
+          handleBackClick={handleBackClick}
+          filteredCount={state.filteredMovies.length}
+          totalCount={state.movies.length}
+          validationMessage={validationMessage}
+        />
       ) : (
         <>
           <h1 className="text-2xl">Romantic Comedy</h1>

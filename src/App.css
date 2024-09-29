@@ -16,6 +16,8 @@
 body {
   overflow-x: hidden;
   font-family: "Titillium Web", sans-serif;
+  background-color: var(--dark-bg-color);
+  color: var(--light-text-color);
 }
 h1,
 h2,
@@ -24,18 +26,14 @@ p {
   font-family: "Titillium Web", sans-serif;
 }
 
-#root {
-  background-color: var(--dark-bg-color);
-  color: var(--light-text-color);
-}
-
+/* This is for navbar sticky when we scroll  */
 .sticky-navbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  background-image: url("../public/assets/images/nav_bar.png"); /* Replace with your image path */
-  background-size: cover; /* Ensures the image covers the entire area */
-  background-position: center; /* Centers the image */
-  background-repeat: no-repeat; /* Prevents image from repeating */
+  background-image: url("../public/assets/images/nav_bar.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   width: 100%;
 }
