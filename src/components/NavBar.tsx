@@ -77,7 +77,7 @@ const NavBar: React.FC<NavBarProps> = ({
         <>
           <h1 className="text-2xl">Romantic Comedy</h1>
           <img
-            src="../../public/assets/images/search.png"
+            src="/assets/images/search.png"
             alt="Search"
             className="w-6 h-6 cursor-pointer"
             onClick={handleSearchIconClick}

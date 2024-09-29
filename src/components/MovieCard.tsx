@@ -1,6 +1,6 @@
 import React from "react";
 import { MovieType } from "../types/Movie";
-import fallbackImage from "../../public/assets/images/placeholder_for_missing_posters.png";
+import fallbackImage from "/assets/images/placeholder_for_missing_posters.png";
 
 type MovieCardProps = {
   movie: MovieType;

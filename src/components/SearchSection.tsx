@@ -24,7 +24,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({
       <div className="flex items-center gap-5 justify-between">
         <div className="flex-none">
           <img
-            src="../../public/assets/images/Back.png"
+            src="/assets/images/Back.png"
             alt="Back"
             className="w-6 h-6 cursor-pointer"
             onClick={handleBackClick}
